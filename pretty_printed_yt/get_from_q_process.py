@@ -34,7 +34,9 @@ class RequestsModel(Base):
 # Setting up Celery
 from celery import Celery
 
-app = Celery('get_from_q_process', broker='amqp://localhost//')
+app = Celery('get_from_q_process', 
+	broker='amqp://localhost//', 
+	backend='db+mysql://decisiontree:decisiontree123@decision-tree.cxhedmomc3jg.us-east-1.rds.amazonaws.com/dc_playground')
 
 # adding tasks
 @app.task

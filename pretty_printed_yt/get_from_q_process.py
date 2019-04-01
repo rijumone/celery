@@ -1,6 +1,7 @@
 # get_from_q_process.py
 
 import json
+import logging
 import datetime
 
 # Setting up SQLAlchemy
@@ -40,9 +41,11 @@ app = Celery('get_from_q_process',
 
 # adding tasks
 @app.task
-def load(request):
+def load(*args, **kwargs):
 	try:
-		request = RequestsModel(request=json.dumps(request))
+		# logging.info(args)
+		# logging.info(kwargs)
+		request = RequestsModel(request=json.dumps({'id': args[0], 'raw_request': kwargs}))
 		session.add(request)
 		session.commit()
 		return True

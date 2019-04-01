@@ -1,0 +1,26 @@
+# to start flower server
+celery flower   -A get_from_q_process --address=0.0.0.0 --port=5555  --broker=amqp://localhost// --basic_auth=user:pass
+
+# to start flask server (deprecated)
+python webhook.py
+
+# check rabbitmq server status
+service rabbitmq-server status
+
+# start celery worker
+celery -A get_from_q_process worker --loglevel=info  --autoscale=5,1
+
+# REST API to add task to queue
+
+curl -X POST \
+  http://192.168.1.127:5555/api/task/async-apply/get_from_q_process.load \
+  -H 'Authorization: Basic dXNlcjpwYXNz' \
+  -H 'Content-Type: application/json' \
+  -H 'Postman-Token: b82fb3ec-2b9f-4e01-af54-596d2bc0effd' \
+  -H 'cache-control: no-cache' \
+  -d '{
+	"args": [1341],
+	"kwargs":{
+		"over":"the"
+	}
+}'
